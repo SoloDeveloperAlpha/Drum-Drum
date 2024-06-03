@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Drum-Drum/build/static/css/main.64e2f6f7.css",
+    "main.js": "/Drum-Drum/build/static/js/main.8b074627.js",
+    "index.html": "/Drum-Drum/build/index.html",
+    "main.64e2f6f7.css.map": "/Drum-Drum/build/static/css/main.64e2f6f7.css.map",
+    "main.8b074627.js.map": "/Drum-Drum/build/static/js/main.8b074627.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.64e2f6f7.css",
+    "static/js/main.8b074627.js"
+  ]
+}
