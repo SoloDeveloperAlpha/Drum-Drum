@@ -1,74 +1,99 @@
-import React, { useRef, useEffect, useState, useContext } from "react";
-import { AppContext } from "../context/AppContext";
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+} from "react";
+import PropTypes from "prop-types";
+import { AppContext } from "../context/AppContext.js";
 
-const Tecla = (props) => {
+const Tecla = ({ tecla, ruta, disp, pwrState }) => {
   const audioRef = useRef(null);
   const [isActive, setIsActive] = useState(false);
   const { dispatch } = useContext(AppContext);
-  function playAudio() {
-    if (audioRef.current) {
+
+  // Reproduce el sonido si el estado `pwrState` lo permite
+  const playAudio = () => {
+    if (pwrState && audioRef.current) {
       audioRef.current.currentTime = 0;
-      audioRef.current.play();
+      audioRef.current
+        .play()
+        .catch((err) => console.error("Error reproduciendo el audio:", err));
     }
-  }
+  };
 
-  function handlePlay() {
-    console.log("Audio is playing!");
-  }
+  // Maneja la reproducción del audio al presionar una tecla
+  const handleKeydown = useCallback(
+    (event) => {
+      if (event.key.toUpperCase() === tecla && pwrState) {
+        setIsActive(true);
+        dispatch({
+          type: "MOSTRAR_DIS",
+          display: disp,
+        });
+        playAudio();
+      }
+    },
+    [tecla, disp, dispatch, pwrState]
+  );
 
-  // Esta función maneja la pulsación de teclas
-  function handleKeydown(event) {
-    if (event.key.toUpperCase() === props.tecla && props.disp !== null) {
-      setIsActive(true);
-      dispatch({
-        type: "MOSTRAR_DIS",
-        display: props.disp,
-      });
-      playAudio();
-    }
-  }
+  // Maneja el estado cuando se suelta la tecla
+  const handleKeyup = useCallback(
+    (event) => {
+      if (event.key.toUpperCase() === tecla) {
+        setIsActive(false);
+      }
+    },
+    [tecla]
+  );
 
-  // Esta función maneja cuando se suelta una tecla
-  function handleKeyup(event) {
-    if (event.key.toUpperCase() === props.tecla) {
-      setIsActive(false);
-    }
-  }
-
-  // Añade el evento de escucha cuando el componente se monta
+  // Agrega y elimina eventos para detectar pulsaciones de teclas
   useEffect(() => {
     document.addEventListener("keydown", handleKeydown);
     document.addEventListener("keyup", handleKeyup);
 
-    // Elimina el evento de escucha cuando el componente se desmonta
     return () => {
       document.removeEventListener("keydown", handleKeydown);
       document.removeEventListener("keyup", handleKeyup);
     };
-  }, []);
+  }, [handleKeydown, handleKeyup]);
 
   return (
     <div
-      className={isActive === false ? "drum-pad" : "drum-pad active"}
-      id={`tecla${props.tecla}`}
+      className={`drum-pad ${isActive ? "active" : ""}`}
+      id={`tecla${tecla}`}
       onClick={() => {
-        dispatch({
-          type: "MOSTRAR_DIS",
-          display: props.disp,
-        });
-        playAudio();
+        if (pwrState) {
+          dispatch({
+            type: "MOSTRAR_DIS",
+            display: disp,
+          });
+          playAudio();
+        }
       }}
     >
       <audio
         className="clip"
-        id={props.tecla}
-        src={props.ruta}
+        id={tecla}
+        src={ruta || ""}
         ref={audioRef}
-        onPlay={handlePlay}
+        onPlay={() => console.log(`Reproduciendo: ${disp}`)}
+        onError={() =>
+          console.error(`No se pudo cargar el archivo de audio: ${ruta}`)
+        }
       ></audio>
-      {props.tecla}
+      {tecla}
     </div>
   );
+};
+
+// Validación de propiedades
+Tecla.propTypes = {
+  tecla: PropTypes.string.isRequired,
+  ruta: PropTypes.string.isRequired,
+  disp: PropTypes.string,
+  pwrState: PropTypes.bool.isRequired,
 };
 
 export default Tecla;

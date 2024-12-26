@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import Tecla from "./componentes/teclas";
+import Tecla from "./componentes/teclas.js";
 import { AppContext } from "./context/AppContext";
 
 const DrumMachine = () => {
@@ -8,7 +8,7 @@ const DrumMachine = () => {
   const { state } = useContext(AppContext);
   const { display } = state;
   let dis = null;
-  if (isOff === true) {
+  if (isOffBank === true) {
     dis = null;
   } else {
     dis = display;
@@ -16,15 +16,50 @@ const DrumMachine = () => {
   return (
     <div id="drum-machine">
       <div id="keyboard">
-        <Tecla tecla="Q" ruta="/audio/Heater-1.mp3" disp="Heater 1" />
-        <Tecla tecla="W" ruta="/audio/Heater-2.mp3" disp="Heater 2" />
-        <Tecla tecla="E" ruta="/audio/Heater-3.mp3" disp="Heater 3" />
-        <Tecla tecla="A" ruta="/audio/Heater-4.mp3" disp="Heater 4" />
-        <Tecla tecla="S" ruta="/audio/Clap.mp3" disp="Clap" />
-        <Tecla tecla="D" ruta="/audio/Open-HH.mp3" disp="Open HH" />
-        <Tecla tecla="Z" ruta="/audio/Kick_n_Hat.mp3" disp="Kick n Hat" />
-        <Tecla tecla="X" ruta="/audio/Kick.mp3" disp="Kick" />
-        <Tecla tecla="C" ruta="/audio/Closed-HH.mp3" disp="Closed HH" />
+        <Tecla
+          tecla="Q"
+          ruta="/audio/Heater-1.mp3"
+          disp="Heater 1"
+          pwrState={!isOff}
+        />
+        <Tecla
+          tecla="W"
+          ruta="/audio/Heater-2.mp3"
+          disp="Heater 2"
+          pwrState={!isOff}
+        />
+        <Tecla
+          tecla="E"
+          ruta="/audio/Heater-3.mp3"
+          disp="Heater 3"
+          pwrState={!isOff}
+        />
+        <Tecla
+          tecla="A"
+          ruta="/audio/Heater-4.mp3"
+          disp="Heater 4"
+          pwrState={!isOff}
+        />
+        <Tecla tecla="S" ruta="/audio/Clap.mp3" disp="Clap" pwrState={!isOff} />
+        <Tecla
+          tecla="D"
+          ruta="/audio/Open-HH.mp3"
+          disp="Open HH"
+          pwrState={!isOff}
+        />
+        <Tecla
+          tecla="Z"
+          ruta="/audio/Kick_n_Hat.mp3"
+          disp="Kick n Hat"
+          pwrState={!isOff}
+        />
+        <Tecla tecla="X" ruta="/audio/Kick.mp3" disp="Kick" pwrState={!isOff} />
+        <Tecla
+          tecla="C"
+          ruta="/audio/Closed-HH.mp3"
+          disp="Closed HH"
+          pwrState={!isOff}
+        />
       </div>
       <div id="panel">
         <div id="display">
