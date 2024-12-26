@@ -13,7 +13,6 @@ const Tecla = ({ tecla, ruta, disp, pwrState }) => {
   const [isActive, setIsActive] = useState(false);
   const { dispatch } = useContext(AppContext);
 
-  // Reproduce el sonido si el estado `pwrState` lo permite
   const playAudio = () => {
     if (pwrState && audioRef.current) {
       audioRef.current.currentTime = 0;
@@ -23,7 +22,6 @@ const Tecla = ({ tecla, ruta, disp, pwrState }) => {
     }
   };
 
-  // Maneja la reproducción del audio al presionar una tecla
   const handleKeydown = useCallback(
     (event) => {
       if (event.key.toUpperCase() === tecla && pwrState) {
@@ -38,7 +36,6 @@ const Tecla = ({ tecla, ruta, disp, pwrState }) => {
     [tecla, disp, dispatch, pwrState]
   );
 
-  // Maneja el estado cuando se suelta la tecla
   const handleKeyup = useCallback(
     (event) => {
       if (event.key.toUpperCase() === tecla) {
@@ -48,7 +45,6 @@ const Tecla = ({ tecla, ruta, disp, pwrState }) => {
     [tecla]
   );
 
-  // Agrega y elimina eventos para detectar pulsaciones de teclas
   useEffect(() => {
     document.addEventListener("keydown", handleKeydown);
     document.addEventListener("keyup", handleKeyup);
@@ -76,7 +72,7 @@ const Tecla = ({ tecla, ruta, disp, pwrState }) => {
       <audio
         className="clip"
         id={tecla}
-        src={ruta || ""}
+        src={`${process.env.PUBLIC_URL}${ruta}`}
         ref={audioRef}
         onPlay={() => console.log(`Reproduciendo: ${disp}`)}
         onError={() =>
@@ -88,7 +84,6 @@ const Tecla = ({ tecla, ruta, disp, pwrState }) => {
   );
 };
 
-// Validación de propiedades
 Tecla.propTypes = {
   tecla: PropTypes.string.isRequired,
   ruta: PropTypes.string.isRequired,
